@@ -30,11 +30,8 @@ void Particle::TranlateSphere(const glm::vec3& position) {
 }
 
 void Particle::ScaleSphere(const float factor) {
-    // Remove the current scaling by scaling down with 1/size
-    m_ModelMatrix = glm::scale(m_ModelMatrix, (glm::vec3(1.0f) / radius));
-
     // Apply the new scaling factor
-    m_ModelMatrix = glm::scale(m_ModelMatrix, glm::vec3(factor));
+    m_ModelMatrix = glm::scale(m_ModelMatrix, glm::vec3(factor/radius));
 
     // Update the stored size for future scaling operations
     radius = factor;

@@ -209,6 +209,14 @@ int main(int argc, char* argv[])
         camera.SetPosition(glm::vec3(0.0f, 0.0f, 100.0f)); // Move the camera 10 units back
         camera.EnableInputs(window);
 
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        ImGui::StyleColorsDark();
+        ImGui_ImplGlfw_InitForOpenGL(window, true);
+        ImGui_ImplOpenGL3_Init("#version 410");
+        float radius=1.0;
+        glm::vec3 boxSize(10.0f, 10.0f, 30.0f);
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))
         {
@@ -219,6 +227,10 @@ int main(int argc, char* argv[])
             GLCall(glClearColor(0.2f, 0.2f, 0.2f, 1.0f));
             GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
             /* Camera setup */
             glm::vec4 color = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
             glm::mat4 view = camera.GetViewMatrix();
@@ -226,12 +238,28 @@ int main(int argc, char* argv[])
             glm::mat4 mvp = proj * view;
 
             /* Render Objects */
+            p1.ScaleSphere(radius);
+            b1.Scale(boxSize);
             p1.Render(mvp, color);
             b1.Render(mvp, color);
+
+            ImGui::Begin("control panel");
+            ImGui::SliderFloat("Radius", &radius, 0.1f, 20.0f);
+            ImGui::SliderFloat("Box-X", &boxSize[0], 1.0f, 100.0f);
+            ImGui::SliderFloat("Box-Y", &boxSize[1], 1.0f, 100.0f);
+            ImGui::SliderFloat("Box-Z", &boxSize[2], 1.0f, 100.0f);
+            ImGui::End();
+
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
         }
+
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
     }
 
     glfwTerminate();
