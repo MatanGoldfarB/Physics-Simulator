@@ -30,11 +30,8 @@ void Box::Tranlate(const glm::vec3& position) {
 }
 
 void Box::Scale(const glm::vec3& factor) {
-    // Remove the current scaling by scaling down with 1/size
-    m_ModelMatrix = glm::scale(m_ModelMatrix, glm::vec3(1.0f) / size);
-
     // Apply the new scaling factor
-    m_ModelMatrix = glm::scale(m_ModelMatrix, factor);
+    m_ModelMatrix = glm::scale(m_ModelMatrix, glm::vec3(factor/size));
 
     // Update the stored size for future scaling operations
     size = factor;
