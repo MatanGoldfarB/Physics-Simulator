@@ -141,9 +141,9 @@ void Camera::orbitBy(float theta, float phi){
     float radTheta = glm::radians(theta);
 
     // Rotation for pitch: around the X axis
-    glm::mat4 rotX = glm::rotate(glm::mat4(1.0f), radPhi, glm::vec3(1.0f, 0.0f, 0.0f));
+    glm::mat4 rotX = glm::rotate(glm::mat4(1.0f), radPhi, glm::cross(m_Up, m_Orientation));
     // Rotation for yaw:   around the Y axis
-    glm::mat4 rotY = glm::rotate(glm::mat4(1.0f), radTheta, glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 rotY = glm::rotate(glm::mat4(1.0f), radTheta, m_Up);
 
     // If we want X-then-Y, combine as (rotY * rotX).
     // (rotX acts first, then rotY acts on the result)
