@@ -215,9 +215,15 @@ int main(int argc, char* argv[])
         ImGui_ImplOpenGL3_Init("#version 410");
         float radius=1.0;
         glm::vec3 boxSize(10.0f, 20.0f, 30.0f);
+        float time = glfwGetTime();
+        int count = 0;
+        int fps=0.0f;
+        const double targetFPS = 60.0;
+        const double targetFrameTime = 1.0 / targetFPS;
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))
         {
+            double startTime = glfwGetTime();
             /* Poll for and process events */
             glfwPollEvents();
 
@@ -241,7 +247,15 @@ int main(int argc, char* argv[])
             p1.Render(mvp, color);
             b1.Render(mvp, color);
 
+            if(glfwGetTime()-time>=1.0){
+                fps = count;
+                count = 0;
+                time = glfwGetTime();
+            } else{
+                count++;
+            }
             ImGui::Begin("control panel");
+            ImGui::Text("FPS: %.2d", fps);
             ImGui::SliderFloat("Radius", &radius, 0.1f, 20.0f);
             ImGui::SliderFloat("Box-X", &boxSize[0], 1.0f, 100.0f);
             ImGui::SliderFloat("Box-Y", &boxSize[1], 1.0f, 100.0f);
@@ -253,6 +267,17 @@ int main(int argc, char* argv[])
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
+            // Frame rate control
+            double endTime = glfwGetTime();
+            double frameTime = endTime - startTime;
+
+            // Sleep if frame finished early
+            if (frameTime < targetFrameTime)
+            {
+                double sleepTime = targetFrameTime - frameTime;
+                // Busy wait (not the most efficient, but simple)
+                while (glfwGetTime() - endTime < sleepTime) {}
+            }
         }
 
         ImGui_ImplOpenGL3_Shutdown();
