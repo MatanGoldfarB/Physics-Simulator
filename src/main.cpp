@@ -195,8 +195,6 @@ int main(int argc, char* argv[])
         IndexBuffer ibB(cubeIndices, sizeof(cubeIndices));
         ibB.Bind();  // Bind the IndexBuffer to the VAO
         Box b1(&shaderB, &vaB, ibB.GetCount());
-        glm::vec3 factor(10.0f, 10.0f, 30.0f);
-        b1.Scale(factor);
 
         /* Enables the Depth Buffer */
     	GLCall(glEnable(GL_DEPTH_TEST));
@@ -216,7 +214,7 @@ int main(int argc, char* argv[])
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init("#version 410");
         float radius=1.0;
-        glm::vec3 boxSize(10.0f, 10.0f, 30.0f);
+        glm::vec3 boxSize(10.0f, 20.0f, 30.0f);
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))
         {

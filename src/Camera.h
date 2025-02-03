@@ -54,6 +54,7 @@ class Camera
 
         void SetPerspective(float fov, float aspectRatio, float near, float far);
         void SetPosition(const glm::vec3& position);
+        void orbitBy(float theta, float phi);
 
         inline glm::mat4 GetViewMatrix() const { return m_View; }
         inline glm::mat4 GetProjectionMatrix() const { return m_Projection; }

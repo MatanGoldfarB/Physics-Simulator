@@ -28,15 +28,19 @@ void KeyCallback(GLFWwindow* window, int key, int scanCode, int action, int mods
         {
             case GLFW_KEY_UP:
                 std::cout << "UP Pressed" << std::endl;
+                camera->orbitBy(0.0f, 10.0f);
                 break;
             case GLFW_KEY_DOWN:
                 std::cout << "DOWN Pressed" << std::endl;
+                camera->orbitBy(0.0f, -10.0f);
                 break;
             case GLFW_KEY_LEFT:
                 std::cout << "LEFT Pressed" << std::endl;
+                camera->orbitBy(-10.0f, 0.0f);
                 break;
             case GLFW_KEY_RIGHT:
                 std::cout << "RIGHT Pressed" << std::endl;
+                camera->orbitBy(10.0f, 0.0f);
                 break;
             default:
                 break;
@@ -129,4 +133,26 @@ void Camera::SetPerspective(float fov, float aspectRatio, float near, float far)
 {
     m_Projection = glm::perspective(glm::radians(fov), aspectRatio, near, far);
     m_View = glm::lookAt(m_Position, m_Position + m_Orientation, m_Up);
+}
+
+void Camera::orbitBy(float theta, float phi){
+    // Convert degrees to radians (if inputs are in degrees)
+    float radPhi   = glm::radians(phi);
+    float radTheta = glm::radians(theta);
+
+    // Rotation for pitch: around the X axis
+    glm::mat4 rotX = glm::rotate(glm::mat4(1.0f), radPhi, glm::vec3(1.0f, 0.0f, 0.0f));
+    // Rotation for yaw:   around the Y axis
+    glm::mat4 rotY = glm::rotate(glm::mat4(1.0f), radTheta, glm::vec3(0.0f, 1.0f, 0.0f));
+
+    // If we want X-then-Y, combine as (rotY * rotX).
+    // (rotX acts first, then rotY acts on the result)
+    glm::mat4 rotationMat = rotY * rotX;
+    glm::vec4 rotated4 = rotationMat * glm::vec4(m_Position, 1.0f);
+    m_Position= glm::vec3(rotated4);
+    rotated4 = rotationMat * glm::vec4(m_Orientation, 1.0f);
+    m_Orientation= glm::vec3(rotated4);
+    rotated4 = rotationMat * glm::vec4(m_Up, 1.0f);
+    m_Up= glm::vec3(rotated4);
+    m_View = glm::lookAt(m_Position, m_Position + m_Orientation, m_Up); // Update the view matrix
 }
