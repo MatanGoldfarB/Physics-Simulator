@@ -84,15 +84,15 @@ void generateSphere(std::vector<float>& vertices, std::vector<unsigned int>& ind
 
 float cubeVertices[] = {
     // positions          // colors         
-    -0.5f, -0.5f,  0.5f,   1.0f, 0.0f, 0.0f,  // 0 - Front-bottom-left
-     0.5f, -0.5f,  0.5f,   0.0f, 1.0f, 0.0f,  // 1 - Front-bottom-right
-     0.5f,  0.5f,  0.5f,   0.0f, 0.0f, 1.0f,  // 2 - Front-top-right
-    -0.5f,  0.5f,  0.5f,   1.0f, 1.0f, 0.0f,  // 3 - Front-top-left
+    -0.5f, -0.5f,  0.5f,   //1.0f, 0.0f, 0.0f,  // 0 - Front-bottom-left
+     0.5f, -0.5f,  0.5f,   //0.0f, 1.0f, 0.0f,  // 1 - Front-bottom-right
+     0.5f,  0.5f,  0.5f,   //0.0f, 0.0f, 1.0f,  // 2 - Front-top-right
+    -0.5f,  0.5f,  0.5f,   //1.0f, 1.0f, 0.0f,  // 3 - Front-top-left
 
-    -0.5f, -0.5f, -0.5f,   1.0f, 0.0f, 1.0f,  // 4 - Back-bottom-left
-     0.5f, -0.5f, -0.5f,   0.0f, 1.0f, 1.0f,  // 5 - Back-bottom-right
-     0.5f,  0.5f, -0.5f,   1.0f, 1.0f, 1.0f,  // 6 - Back-top-right
-    -0.5f,  0.5f, -0.5f,   0.5f, 0.5f, 0.5f   // 7 - Back-top-left
+    -0.5f, -0.5f, -0.5f,   //1.0f, 0.0f, 1.0f,  // 4 - Back-bottom-left
+     0.5f, -0.5f, -0.5f,   //0.0f, 1.0f, 1.0f,  // 5 - Back-bottom-right
+     0.5f,  0.5f, -0.5f,   //1.0f, 1.0f, 1.0f,  // 6 - Back-top-right
+    -0.5f,  0.5f, -0.5f,   //0.5f, 0.5f, 0.5f   // 7 - Back-top-left
 };
 
 
@@ -179,13 +179,13 @@ int main(int argc, char* argv[])
         p1.ScaleSphere(0.1f);
 
         // Configure the shared VertexArray
-        Shader shaderB("res/shaders/basic.shader");
+        Shader shaderB("res/shaders/box.shader");
             // Configure the shared VertexArray
         VertexArray vaB;
         VertexBuffer vbB(cubeVertices, sizeof(cubeVertices));
         VertexBufferLayout layoutB;
         layoutB.Push<float>(3);  // Positions
-        layoutB.Push<float>(3);  // Colors
+        //layoutB.Push<float>(3);  // Colors
         vaB.AddBuffer(vbB, layoutB);  // Configure the VAO
 
         // Setup shared IndexBuffer
@@ -214,7 +214,7 @@ int main(int argc, char* argv[])
             GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
             /* Initialize uniform color */
-            glm::vec4 color = glm::vec4(0.0, 1.0f, 1.0f, 1.0f);
+            glm::vec4 color = glm::vec4(0.0, 0.0f, 1.0f, 1.0f);
 
             /* Initialize uniform color */
             glm::mat4 view = camera.GetViewMatrix();
