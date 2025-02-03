@@ -13,9 +13,9 @@ private:
     glm::mat4 m_ModelMatrix;
     glm::vec3 center;
     float radius;
+    int ibSize;
     float mass;
     glm::vec3 velocity;
-    int ibSize;
 
 public:
     Particle(Shader* shader, VertexArray* va, int o_ibSize, float o_mass, glm::vec3 invelocity);
@@ -25,4 +25,5 @@ public:
     void TranlateSphere(const glm::vec3& position);
     void ScaleSphere(const float factor);
     glm::mat4 GetModelMatrix();
+    void update(glm::vec3 outerForces);
 };

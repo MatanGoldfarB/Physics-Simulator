@@ -221,8 +221,9 @@ int main(int argc, char* argv[])
         float time = glfwGetTime();
         int count = 0;
         int fps=0.0f;
-        const double targetFPS = 60.0;
-        const double targetFrameTime = 1.0 / targetFPS;
+        float simTime = 0.0f;
+        const float targetFPS = 60.0f;
+        const float targetFrameTime = 1.0f / targetFPS;
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))
         {
@@ -253,8 +254,10 @@ int main(int argc, char* argv[])
             } else{
                 count++;
             }
+            simTime+=targetFrameTime;
             ImGui::Begin("control panel");
             ImGui::Text("FPS: %.2d", fps);
+            ImGui::Text("Simulation Time: %.2f", simTime);
             ImGui::SliderFloat("Box-X", &boxSize[0], 1.0f, 100.0f);
             ImGui::SliderFloat("Box-Y", &boxSize[1], 1.0f, 100.0f);
             ImGui::SliderFloat("Box-Z", &boxSize[2], 1.0f, 100.0f);
