@@ -8,7 +8,8 @@ Box::Box(Shader* shader, VertexArray* va, int o_ibSize)
       m_ModelMatrix(1.0f),
       center(0.0f),
       size(glm::vec3(1.0f)),
-      ibSize(o_ibSize) {
+      ibSize(o_ibSize),
+      boundaries(glm::mat3x2(-0.5f, 0.5f, -0.5f, 0.5f, -0.5f, 0.5f)) {
 }
 
 Box::~Box() {
@@ -25,8 +26,15 @@ void Box::Render(glm::mat4 mvp, glm::vec4 color) {
 }
 
 void Box::Tranlate(const glm::vec3& position) {
-    center = position;
-    m_ModelMatrix = glm::translate(glm::mat4(1.0f), position) * m_ModelMatrix;
+    printf("changing translate from");
+    center += position;
+    m_ModelMatrix = glm::translate(m_ModelMatrix, position);
+    boundaries[0][0]+=position[0];
+    boundaries[0][1]+=position[0];
+    boundaries[1][0]+=position[1];
+    boundaries[1][1]+=position[1];
+    boundaries[2][0]+=position[2];
+    boundaries[2][1]+=position[2];
 }
 
 void Box::Scale(const glm::vec3& factor) {
@@ -34,9 +42,19 @@ void Box::Scale(const glm::vec3& factor) {
     m_ModelMatrix = glm::scale(m_ModelMatrix, factor/size);
 
     // Update the stored size for future scaling operations
+    boundaries[0][0]*=factor[0]/size[0];
+    boundaries[0][1]*=factor[0]/size[0];
+    boundaries[1][0]*=factor[1]/size[1];
+    boundaries[1][1]*=factor[1]/size[1];
+    boundaries[2][0]*=factor[2]/size[2];
+    boundaries[2][1]*=factor[2]/size[2];
     size = factor;
 }
 
 glm::mat4 Box::GetModelMatrix(){
     return m_ModelMatrix;
+}
+
+glm::mat3x2 Box::GetBoundries(){
+    return boundaries;
 }

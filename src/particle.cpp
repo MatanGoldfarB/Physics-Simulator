@@ -32,7 +32,6 @@ void Particle::Render(glm::mat4 mvp, glm::vec4 color) {
 
 void Particle::TranlateSphere(const glm::vec3& position) {
     center += position;
-    std::cout << glm::to_string(center) << std::endl;
     m_ModelMatrix = glm::translate(m_ModelMatrix, position);
 }
 
@@ -53,3 +52,19 @@ void Particle::update(glm::vec3 outerForces){
     velocity += (outerForces/mass)*TIME_STEP;
     TranlateSphere(delta);
 }
+
+void Particle::resolveCollisionBox(glm::mat3x2 boundaries){
+    printf("hereX %.2f\n", boundaries[0][1]);
+    if((center[0]+radius) >= boundaries[0][1] || (center[0]-radius) <= boundaries[0][0]){
+        std::cout << "hereX" << std::endl;
+        velocity[0] *= -1;
+    }
+    if((center[1]+radius) >= boundaries[1][1] || (center[1]-radius) <= boundaries[1][0]){
+        std::cout << "hereY" << std::endl;
+        velocity[1] *= -1;
+    }
+    if((center[2]+radius) >= boundaries[2][1] || (center[2]-radius) <= boundaries[2][0]){
+        std::cout << "hereX" << std::endl;
+        velocity[2] *= -1;
+    }
+} 

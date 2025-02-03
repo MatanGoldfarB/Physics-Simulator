@@ -5,6 +5,7 @@
 #include <VertexBuffer.h>
 #include <IndexBuffer.h>
 #include <Texture.h>
+#include <memory>
 
 class Box {
 private:
@@ -14,6 +15,7 @@ private:
     glm::vec3 center;
     glm::vec3 size;
     int ibSize;
+    glm::mat3x2 boundaries;
 
 public:
     Box(Shader* shader, VertexArray* va, int ibSize);
@@ -23,4 +25,5 @@ public:
     void Tranlate(const glm::vec3& position);
     void Scale(const glm::vec3& factor);
     glm::mat4 GetModelMatrix();
+    glm::mat3x2 GetBoundries();
 };

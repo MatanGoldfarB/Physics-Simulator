@@ -5,6 +5,7 @@
 #include <VertexBuffer.h>
 #include <IndexBuffer.h>
 #include <Texture.h>
+#include "box.h"
 
 class Particle {
 private:
@@ -26,4 +27,6 @@ public:
     void ScaleSphere(const float factor);
     glm::mat4 GetModelMatrix();
     void update(glm::vec3 outerForces);
+    void resolveCollisionBox(glm::mat3x2 boundaries);
+    //void resolveCollisionParticle(Particle p);
 };

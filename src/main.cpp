@@ -195,7 +195,7 @@ int main(int argc, char* argv[])
         // Setup shared IndexBuffer
         IndexBuffer ibB(cubeIndices, sizeof(cubeIndices));
         ibB.Bind();  // Bind the IndexBuffer to the VAO
-        Box b1(&shaderB, &vaB, ibB.GetCount());
+        Box* b1 = new Box(&shaderB, &vaB, ibB.GetCount());
 
         Scene scene(b1);
         scene.addParticle(p1);
@@ -217,7 +217,7 @@ int main(int argc, char* argv[])
         ImGui_ImplGlfw_InitForOpenGL(window, true);
         ImGui_ImplOpenGL3_Init("#version 410");
         float radius=1.0;
-        glm::vec3 boxSize(10.0f, 20.0f, 30.0f);
+        glm::vec3 boxSize(60.0f, 35.0f, 30.0f);
         float time = glfwGetTime();
         int count = 0;
         int fps=0.0f;
@@ -284,8 +284,8 @@ int main(int argc, char* argv[])
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
         ImGui::DestroyContext();
+        delete b1;
     }
-
     glfwTerminate();
     return 0;
 }
