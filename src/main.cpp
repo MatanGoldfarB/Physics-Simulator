@@ -21,7 +21,7 @@ const unsigned int width = 800;
 const unsigned int height = 800;
 // const float FOVdegree = 45.0f;  // Field Of View Angle
 const float near = 0.1f;
-const float far = 100.0f;
+const float far = 200.0f;
 
 // Function to generate sphere vertices and indices
 void generateSphere(std::vector<float>& vertices, std::vector<unsigned int>& indices, float radius, unsigned int sectorCount, unsigned int stackCount) {
@@ -83,16 +83,16 @@ void generateSphere(std::vector<float>& vertices, std::vector<unsigned int>& ind
 }
 
 float cubeVertices[] = {
-    // positions          // colors         
-    -0.5f, -0.5f,  0.5f,   //1.0f, 0.0f, 0.0f,  // 0 - Front-bottom-left
-     0.5f, -0.5f,  0.5f,   //0.0f, 1.0f, 0.0f,  // 1 - Front-bottom-right
-     0.5f,  0.5f,  0.5f,   //0.0f, 0.0f, 1.0f,  // 2 - Front-top-right
-    -0.5f,  0.5f,  0.5f,   //1.0f, 1.0f, 0.0f,  // 3 - Front-top-left
+    // positions         
+    -0.5f, -0.5f,  0.5f,   // 0 - Front-bottom-left
+     0.5f, -0.5f,  0.5f,   // 1 - Front-bottom-right
+     0.5f,  0.5f,  0.5f,   // 2 - Front-top-right
+    -0.5f,  0.5f,  0.5f,   // 3 - Front-top-left
 
-    -0.5f, -0.5f, -0.5f,   //1.0f, 0.0f, 1.0f,  // 4 - Back-bottom-left
-     0.5f, -0.5f, -0.5f,   //0.0f, 1.0f, 1.0f,  // 5 - Back-bottom-right
-     0.5f,  0.5f, -0.5f,   //1.0f, 1.0f, 1.0f,  // 6 - Back-top-right
-    -0.5f,  0.5f, -0.5f,   //0.5f, 0.5f, 0.5f   // 7 - Back-top-left
+    -0.5f, -0.5f, -0.5f,   // 4 - Back-bottom-left
+     0.5f, -0.5f, -0.5f,   // 5 - Back-bottom-right
+     0.5f,  0.5f, -0.5f,   // 6 - Back-top-right
+    -0.5f,  0.5f, -0.5f,   // 7 - Back-top-left
 };
 
 
@@ -176,7 +176,7 @@ int main(int argc, char* argv[])
         Shader shader("res/shaders/basic.shader");
         shader.Bind();
         Particle p1(&shader, &va, 0.1f, ib.GetCount());
-        p1.ScaleSphere(0.1f);
+        p1.ScaleSphere(10.0f);
 
         // Configure the shared VertexArray
         Shader shaderB("res/shaders/box.shader");
@@ -192,6 +192,8 @@ int main(int argc, char* argv[])
         IndexBuffer ibB(cubeIndices, sizeof(cubeIndices));
         ibB.Bind();  // Bind the IndexBuffer to the VAO
         Box b1(&shaderB, &vaB, ibB.GetCount());
+        glm::vec3 factor(100.0f, 20.0f, 10.0f);
+        b1.Scale(factor);
 
         /* Enables the Depth Buffer */
     	GLCall(glEnable(GL_DEPTH_TEST));
@@ -214,7 +216,7 @@ int main(int argc, char* argv[])
             GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
             /* Initialize uniform color */
-            glm::vec4 color = glm::vec4(0.0, 0.0f, 1.0f, 1.0f);
+            glm::vec4 color = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
 
             /* Initialize uniform color */
             glm::mat4 view = camera.GetViewMatrix();
