@@ -2,13 +2,15 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-Particle::Particle(Shader* shader, VertexArray* va, int o_ibSize)
+Particle::Particle(Shader* shader, VertexArray* va, int o_ibSize, float o_mass, glm::vec3 invelocity)
     : m_VA(va),
       m_Shader(shader),  // Use external shader
       m_ModelMatrix(1.0f),
       center(0.0f),
       radius(1.0f),
-      ibSize(o_ibSize) {
+      ibSize(o_ibSize),
+      mass(o_mass),
+      velocity(invelocity) {
 }
 
 Particle::~Particle() {

@@ -13,6 +13,7 @@
 #include <Camera.h>
 #include <particle.h>
 #include <box.h>
+#include <scene.h>
 
 #include <imgui/imgui.h>
 #include <imgui/backends/imgui_impl_glfw.h>
@@ -179,7 +180,7 @@ int main(int argc, char* argv[])
         ib.Bind();
         Shader shader("res/shaders/basic.shader");
         shader.Bind();
-        Particle p1(&shader, &va, ib.GetCount());
+        Particle p1(&shader, &va, ib.GetCount(), 1.0f, glm::vec3(0.0f));
 
         // Configure the shared VertexArray
         Shader shaderB("res/shaders/box.shader");
@@ -196,6 +197,8 @@ int main(int argc, char* argv[])
         ibB.Bind();  // Bind the IndexBuffer to the VAO
         Box b1(&shaderB, &vaB, ibB.GetCount());
 
+        Scene scene(b1);
+        scene.addParticle(p1);
         /* Enables the Depth Buffer */
     	GLCall(glEnable(GL_DEPTH_TEST));
 
@@ -236,16 +239,12 @@ int main(int argc, char* argv[])
             ImGui::NewFrame();
 
             /* Camera setup */
-            glm::vec4 color = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
             glm::mat4 view = camera.GetViewMatrix();
             glm::mat4 proj = camera.GetProjectionMatrix();
             glm::mat4 mvp = proj * view;
 
-            /* Render Objects */
-            p1.ScaleSphere(radius);
-            b1.Scale(boxSize);
-            p1.Render(mvp, color);
-            b1.Render(mvp, color);
+            scene.setBoxSize(boxSize);
+            scene.Render(mvp);
 
             if(glfwGetTime()-time>=1.0){
                 fps = count;
@@ -256,7 +255,6 @@ int main(int argc, char* argv[])
             }
             ImGui::Begin("control panel");
             ImGui::Text("FPS: %.2d", fps);
-            ImGui::SliderFloat("Radius", &radius, 0.1f, 20.0f);
             ImGui::SliderFloat("Box-X", &boxSize[0], 1.0f, 100.0f);
             ImGui::SliderFloat("Box-Y", &boxSize[1], 1.0f, 100.0f);
             ImGui::SliderFloat("Box-Z", &boxSize[2], 1.0f, 100.0f);

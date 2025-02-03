@@ -13,10 +13,12 @@ private:
     glm::mat4 m_ModelMatrix;
     glm::vec3 center;
     float radius;
+    float mass;
+    glm::vec3 velocity;
     int ibSize;
 
 public:
-    Particle(Shader* shader, VertexArray* va, int o_ibSize);
+    Particle(Shader* shader, VertexArray* va, int o_ibSize, float o_mass, glm::vec3 invelocity);
     ~Particle();
 
     void Render(glm::mat4 mvp, glm::vec4 color);
