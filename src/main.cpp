@@ -14,6 +14,10 @@
 #include <particle.h>
 #include <box.h>
 
+#include <imgui/imgui.h>
+#include <imgui/backends/imgui_impl_glfw.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
+
 #include <iostream>
 
 /* Window size */
@@ -139,10 +143,10 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    /* Make the window's context current */
+    // Make the window's context current
     glfwMakeContextCurrent(window);
 
-    /* Load GLAD so it configures OpenGL */
+    // Load GLAD
     gladLoadGL();
 
     /* Control frame rate */
@@ -175,8 +179,7 @@ int main(int argc, char* argv[])
         ib.Bind();
         Shader shader("res/shaders/basic.shader");
         shader.Bind();
-        Particle p1(&shader, &va, 0.1f, ib.GetCount());
-        p1.ScaleSphere(10.0f);
+        Particle p1(&shader, &va, ib.GetCount());
 
         // Configure the shared VertexArray
         Shader shaderB("res/shaders/box.shader");
@@ -192,7 +195,7 @@ int main(int argc, char* argv[])
         IndexBuffer ibB(cubeIndices, sizeof(cubeIndices));
         ibB.Bind();  // Bind the IndexBuffer to the VAO
         Box b1(&shaderB, &vaB, ibB.GetCount());
-        glm::vec3 factor(100.0f, 20.0f, 10.0f);
+        glm::vec3 factor(10.0f, 10.0f, 30.0f);
         b1.Scale(factor);
 
         /* Enables the Depth Buffer */
@@ -203,34 +206,31 @@ int main(int argc, char* argv[])
         const float FOVdegree = 45.0f;
         const float aspectRatio = static_cast<float>(width) / height;
         camera.SetPerspective(FOVdegree, aspectRatio, near, far);
-        camera.SetPosition(glm::vec3(0.0f, 0.0f, 10.0f)); // Move the camera 10 units back
+        camera.SetPosition(glm::vec3(0.0f, 0.0f, 100.0f)); // Move the camera 10 units back
         camera.EnableInputs(window);
 
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))
         {
-            /* Set white background color */
-            GLCall(glClearColor(0.2f, 0.2f, 0.2f, 1.0f));
+            /* Poll for and process events */
+            glfwPollEvents();
 
-            /* Render here */
+            /* Set background color */
+            GLCall(glClearColor(0.2f, 0.2f, 0.2f, 1.0f));
             GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
-            /* Initialize uniform color */
+            /* Camera setup */
             glm::vec4 color = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
-
-            /* Initialize uniform color */
             glm::mat4 view = camera.GetViewMatrix();
             glm::mat4 proj = camera.GetProjectionMatrix();
             glm::mat4 mvp = proj * view;
 
+            /* Render Objects */
             p1.Render(mvp, color);
             b1.Render(mvp, color);
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
-
-            /* Poll for and process events */
-            glfwPollEvents();
         }
     }
 

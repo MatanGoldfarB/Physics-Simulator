@@ -16,7 +16,7 @@ private:
     int ibSize;
 
 public:
-    Particle(Shader* shader, VertexArray* va, float o_radius, int o_ibSize);
+    Particle(Shader* shader, VertexArray* va, int o_ibSize);
     ~Particle();
 
     void Render(glm::mat4 mvp, glm::vec4 color);

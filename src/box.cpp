@@ -7,6 +7,7 @@ Box::Box(Shader* shader, VertexArray* va, int o_ibSize)
       m_Shader(shader),  // Use external shader
       m_ModelMatrix(1.0f),
       center(0.0f),
+      size(glm::vec3(1.0f)),
       ibSize(o_ibSize) {
 }
 
@@ -29,8 +30,14 @@ void Box::Tranlate(const glm::vec3& position) {
 }
 
 void Box::Scale(const glm::vec3& factor) {
-    size = size * factor;
-    m_ModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(factor)) * m_ModelMatrix;
+    // Remove the current scaling by scaling down with 1/size
+    m_ModelMatrix = glm::scale(m_ModelMatrix, glm::vec3(1.0f) / size);
+
+    // Apply the new scaling factor
+    m_ModelMatrix = glm::scale(m_ModelMatrix, factor);
+
+    // Update the stored size for future scaling operations
+    size = factor;
 }
 
 glm::mat4 Box::GetModelMatrix(){

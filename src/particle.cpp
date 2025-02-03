@@ -2,12 +2,12 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-Particle::Particle(Shader* shader, VertexArray* va, float o_radius, int o_ibSize)
+Particle::Particle(Shader* shader, VertexArray* va, int o_ibSize)
     : m_VA(va),
       m_Shader(shader),  // Use external shader
       m_ModelMatrix(1.0f),
       center(0.0f),
-      radius(o_radius),
+      radius(1.0f),
       ibSize(o_ibSize) {
 }
 
@@ -30,8 +30,14 @@ void Particle::TranlateSphere(const glm::vec3& position) {
 }
 
 void Particle::ScaleSphere(const float factor) {
-    radius = radius * factor;
-    m_ModelMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(factor)) * m_ModelMatrix;
+    // Remove the current scaling by scaling down with 1/size
+    m_ModelMatrix = glm::scale(m_ModelMatrix, (glm::vec3(1.0f) / radius));
+
+    // Apply the new scaling factor
+    m_ModelMatrix = glm::scale(m_ModelMatrix, glm::vec3(factor));
+
+    // Update the stored size for future scaling operations
+    radius = factor;
 }
 
 glm::mat4 Particle::GetModelMatrix(){

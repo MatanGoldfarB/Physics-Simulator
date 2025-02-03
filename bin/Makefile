@@ -26,13 +26,30 @@ else
     endif
 endif
 
-# Source and object files
-SRC_FILES = $(wildcard ${workspaceFolder}/src/*.cpp)
-OBJ_FILES = $(patsubst ${workspaceFolder}/src/%.cpp, ${workspaceFolder}/bin/%.o, $(SRC_FILES)) ${workspaceFolder}/bin/glad.o
+CPPFLAGS += -DIMGUI_IMPL_OPENGL_LOADER_GLAD
 
-# Rule to compile .o files from .cpp files
+# ImGui source files
+IMGUI_SRC = ${workspaceFolder}/include/imgui/imgui.cpp \
+            ${workspaceFolder}/include/imgui/imgui_draw.cpp \
+            ${workspaceFolder}/include/imgui/imgui_tables.cpp \
+            ${workspaceFolder}/include/imgui/imgui_widgets.cpp \
+            ${workspaceFolder}/include/imgui/backends/imgui_impl_glfw.cpp \
+            ${workspaceFolder}/include/imgui/backends/imgui_impl_opengl3.cpp
+
+# All source files
+SRC_FILES = $(wildcard ${workspaceFolder}/src/*.cpp) $(IMGUI_SRC)
+OBJ_FILES = $(patsubst ${workspaceFolder}/src/%.cpp, ${workspaceFolder}/bin/%.o, $(wildcard ${workspaceFolder}/src/*.cpp)) \
+            $(patsubst ${workspaceFolder}/include/imgui/%.cpp, ${workspaceFolder}/bin/%.o, $(IMGUI_SRC)) \
+            ${workspaceFolder}/bin/glad.o
+
+
+# Rule for compiling .o files from .cpp (src and ImGui)
 ${workspaceFolder}/bin/%.o: ${workspaceFolder}/src/%.cpp | $(workspaceFolder)/bin
 	$(CPPFLAGS) -c $< -o $@
+
+${workspaceFolder}/bin/%.o: ${workspaceFolder}/include/imgui/%.cpp | $(workspaceFolder)/bin
+	$(CPPFLAGS) -I${workspaceFolder}/include/imgui -c $< -o $@
+
 
 # Rule to compile glad.o
 ${workspaceFolder}/bin/glad.o: ${workspaceFolder}/src/glad.c | $(workspaceFolder)/bin
