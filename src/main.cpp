@@ -180,7 +180,9 @@ int main(int argc, char* argv[])
         ib.Bind();
         Shader shader("res/shaders/basic.shader");
         shader.Bind();
-        Particle p1(&shader, &va, ib.GetCount(), 1.0f, glm::vec3(0.0f));
+        Particle p1(&shader, &va, ib.GetCount(), 1.0f, glm::vec3(5.0f, 0.0f, 0.0f));
+        Particle p2(&shader, &va, ib.GetCount(), 1.0f, glm::vec3(7.0f, 0.0f, 0.0f)); 
+        p2.TranlateSphere(glm::vec3(5.0f, 0.0f, 0.0f));
 
         // Configure the shared VertexArray
         Shader shaderB("res/shaders/box.shader");
@@ -199,6 +201,7 @@ int main(int argc, char* argv[])
 
         Scene scene(b1);
         scene.addParticle(p1);
+        scene.addParticle(p2);
         /* Enables the Depth Buffer */
     	GLCall(glEnable(GL_DEPTH_TEST));
 

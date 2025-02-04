@@ -3,8 +3,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/string_cast.hpp>
+#include <glm/gtx/norm.hpp>
 
 const float TIME_STEP = 1.0f/60.0f;
+const float EPSILON = 1e-6f;
 
 Particle::Particle(Shader* shader, VertexArray* va, int o_ibSize, float o_mass, glm::vec3 invelocity)
     : m_VA(va),
@@ -54,17 +56,42 @@ void Particle::update(glm::vec3 outerForces){
 }
 
 void Particle::resolveCollisionBox(glm::mat3x2 boundaries){
-    printf("hereX %.2f\n", boundaries[0][1]);
-    if((center[0]+radius) >= boundaries[0][1] || (center[0]-radius) <= boundaries[0][0]){
-        std::cout << "hereX" << std::endl;
-        velocity[0] *= -1;
+    float damping = -0.8f;
+    if((center[0]+radius) > boundaries[0][1]) {
+        velocity[0] *= damping;
+        TranlateSphere(glm::vec3(boundaries[0][1] - radius, center[1], center[2]) - center);
+    } else if((center[0]-radius) < boundaries[0][0]) {
+        velocity[0] *= damping;
+        TranlateSphere(glm::vec3(boundaries[0][0] + radius, center[1], center[2]) - center);
     }
-    if((center[1]+radius) >= boundaries[1][1] || (center[1]-radius) <= boundaries[1][0]){
-        std::cout << "hereY" << std::endl;
-        velocity[1] *= -1;
+    if((center[1]+radius) > boundaries[1][1]) {
+        velocity[1] *= damping;
+        TranlateSphere(glm::vec3(center[0], boundaries[1][1] - radius, center[2]) - center);
+    } else if((center[1]-radius) < boundaries[1][0]){
+        velocity[1] *= damping;
+        TranlateSphere(glm::vec3(center[0], boundaries[1][0] + radius, center[2]) - center);
     }
-    if((center[2]+radius) >= boundaries[2][1] || (center[2]-radius) <= boundaries[2][0]){
-        std::cout << "hereX" << std::endl;
-        velocity[2] *= -1;
+    if((center[2]+radius) > boundaries[2][1]) {
+        velocity[2] *= damping;
+        TranlateSphere(glm::vec3(center[0], center[1], boundaries[2][1] - radius) -center);
+    } else if((center[2]-radius) < boundaries[2][0]){
+        velocity[2] *= damping;
+        TranlateSphere(glm::vec3(center[0], center[1], boundaries[2][0] + radius) - center);
     }
 } 
+
+void Particle::resolveCollisionParticle(Particle& p) {
+    glm::vec3 delta = center - p.center;
+    float distanceSquared = glm::dot(delta, delta);
+    float combinedRadii = radius + p.radius;
+    // Collision Detection
+    if (distanceSquared <= combinedRadii * combinedRadii) {
+        // Store original velocities
+        glm::vec3 v1_initial = velocity;
+        glm::vec3 v2_initial = p.velocity;
+
+        // Apply elastic collision formulas
+        velocity = ((mass - p.mass) * v1_initial + 2 * p.mass * v2_initial) / (mass + p.mass);
+        p.velocity = ((p.mass - mass) * v2_initial + 2 * mass * v1_initial) / (mass + p.mass);
+    }
+}

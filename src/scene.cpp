@@ -12,11 +12,17 @@ void Scene::Render(glm::mat4 mvp){
     box->Render(mvp, color);
 
 
-    for(Particle& p : particles){
-        p.resolveCollisionBox(box->GetBoundries());
-        p.update(globalForce);
-        p.Render(mvp, color);
+    for (size_t i = 0; i < particles.size(); i++) {
+        particles[i].resolveCollisionBox(box->GetBoundries());
+
+        for (size_t j = i + 1; j < particles.size(); j++) {
+            particles[i].resolveCollisionParticle(particles[j]);
+        }
+
+        particles[i].update(globalForce);
+        particles[i].Render(mvp, color);
     }
+
 }
 
 void Scene::setBoxSize(glm::vec3 size){

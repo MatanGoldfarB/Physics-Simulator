@@ -28,5 +28,5 @@ public:
     glm::mat4 GetModelMatrix();
     void update(glm::vec3 outerForces);
     void resolveCollisionBox(glm::mat3x2 boundaries);
-    //void resolveCollisionParticle(Particle p);
+    void resolveCollisionParticle(Particle& p);
 };
