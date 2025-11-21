@@ -5,16 +5,6 @@ This project showcases my understanding of **numerical physics**, **collision ha
 
 ---
 
-## 🎥 Project Demo  
-(Insert video/gif here once available)
-# Physics Simulator
-
-A real-time physics simulation engine built in **C++** and **OpenGL**, demonstrating my understanding of physics modeling, numerical integration, collision detection, and interactive 3D rendering.
-
-This repository is intended for **recruiters and engineering teams** who want to quickly evaluate my level of knowledge in systems programming, graphics, simulation, and code architecture.
-
----
-
 ## 🎥 Project Demo
 
 https://api.myfiles.ai/download?path=/mnt/data/PhysicsSimulator.mov
