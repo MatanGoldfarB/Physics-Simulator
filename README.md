@@ -7,7 +7,9 @@ This project showcases my understanding of **numerical physics**, **collision ha
 
 ## 🎥 Project Demo
 
-https://api.myfiles.ai/download?path=/mnt/data/PhysicsSimulator.mov
+
+https://github.com/user-attachments/assets/5680938f-acdc-41b3-a1c6-fcaa43ba30cb
+
 
 *(If the video preview doesn’t load on GitHub, click the link to view the .mov directly.)*
 
