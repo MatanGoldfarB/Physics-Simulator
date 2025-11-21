@@ -68,8 +68,6 @@ Physics-Simulator/
 └── README.md
 ```
 
-*(If the structure differs, I can automatically rewrite this based on your repo.)*
-
 ---
 
 ## 📌 What This Project Demonstrates
