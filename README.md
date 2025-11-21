@@ -99,7 +99,6 @@ Perfect for roles involving:
 git clone https://github.com/MatanGoldfarB/Physics-Simulator
 cd Physics-Simulator
 mkdir build && cd build
-cmake ..
 make
 ./PhysicsSimulator
 ```
