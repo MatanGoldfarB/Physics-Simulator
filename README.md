@@ -131,9 +131,3 @@ If you're a recruiter or hiring manager and want to discuss the project:
 
 ---
 
----
-
-## 🚀 Features
-
-### **⚙️ Physics Engine**
-- Rigid-body simula# Physics-Simulator
